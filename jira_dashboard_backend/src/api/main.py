@@ -18,8 +18,10 @@ from pydantic import BaseModel, Field, EmailStr
 import jwt
 from datetime import datetime, timedelta
 
-# == Settings (Should use .env in real deployments) ==
-JWT_SECRET = os.getenv("JWT_SECRET", "testsecret")   # Should be set in .env
+# == Settings ==
+JWT_SECRET = os.getenv("JWT_SECRET")
+if not JWT_SECRET:
+    raise ValueError("JWT_SECRET environment variable is required and must be set to a secure random string")
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRY_MINUTES = 60 * 6  # token valid for 6 hours
 
@@ -319,4 +321,3 @@ async def add_security_headers(request: Request, call_next):
         "Strict-Transport-Security"
     ] = "max-age=31536000; includeSubDomains"
     return response
-
