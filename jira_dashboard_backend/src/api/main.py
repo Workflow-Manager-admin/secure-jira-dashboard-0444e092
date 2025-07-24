@@ -31,7 +31,14 @@ JIRA_API_PROJECTS_ENDPOINT = "/project/search"
 COOKIE_NAME = "jira_dashboard_token"
 COOKIE_SECURE = True  # Should be True in production (HTTPS)
 
-ALLOWED_ORIGINS = ["*"]  # Should be restricted for production
+# CORS Configuration - Environment-based origins for security
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+if ENVIRONMENT == "production":
+    # TODO: Replace with actual production domain(s)
+    ALLOWED_ORIGINS = ["https://your-production-domain.com"]
+else:
+    # Development: Only allow React dev server
+    ALLOWED_ORIGINS = ["http://localhost:3000"]
 
 # == FastAPI Setup & Metadata ==
 tags_metadata = [
